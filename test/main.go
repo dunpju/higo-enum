@@ -25,13 +25,17 @@ func (this Enum) String() string {
 	return "N/A"
 }
 
-func (this Enum) Message() *enum.CodeDoc {
-	return enum.New(this)
+func (this Enum) Message() string {
+	return enum.New(this).Doc
+}
+
+func (this Enum) Code() int64 {
+	return enum.New(this).Code
 }
 
 func main() {
-	fmt.Println(CPU.Message().Code, CPU.Message().Doc)
+	fmt.Println(CPU.Message(), CPU.Code())
 	fmt.Println(enum.Enums())
-	fmt.Println(GPU.Message().Code, GPU.Message().Doc)
+	fmt.Println(GPU.Message(), GPU.Code())
 	fmt.Println(1)
 }

@@ -19,7 +19,8 @@ func init() {
 }
 
 type IEnum interface {
-	Message() *CodeDoc
+	Code() int64
+	Message() string
 	String() string
 }
 
