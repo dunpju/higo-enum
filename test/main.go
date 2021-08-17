@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"higo-enum/enum"
+	"github.com/dengpju/higo-enum/enum"
 )
 
 type Enum int
