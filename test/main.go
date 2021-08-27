@@ -5,38 +5,41 @@ import (
 	"github.com/dengpju/higo-enum/enum"
 )
 
-type TestEnum enum.Enum
-
-const (
-	None TestEnum = iota
-	CPU   // 中央处理器
-	GPU   // 图形处理器
-)
+type TestEnum int
 
 func (this TestEnum) Name() string {
 	return "TestEnum"
 }
 
+func (this TestEnum) Inspect(value interface{}) error {
+	return enum.Inspect(this, value)
+}
+
 func (this TestEnum) Message() string {
 	container := enum.Get(this)
-	if e, ok := container.(map[TestEnum]string)[this]; ok {
+	if e, ok := container[this]; ok {
 		return e
 	}
 	return "Undefined"
 }
 
-func (this TestEnum) Register() interface{} {
-	container := make(map[TestEnum]string)
-	container[None] = "None"
-	container[CPU] = "CPU"
-	container[GPU] = "GPU"
-	return container
+const (
+	None TestEnum = 1
+	CPU  TestEnum = 2 // 中央处理器
+	GPU  TestEnum = 3 // 图形处理器
+)
+
+func (this TestEnum) Register() enum.Message {
+	return make(enum.Message).
+		Put(None, "None").
+		Put(CPU, "CPU").
+		Put(GPU, "GPU")
 }
 
 func main() {
 	fmt.Println(None, None.Message())
-	//fmt.Println(CPU.Message(), CPU.Code())
 	fmt.Println(enum.Enums())
 	fmt.Println(GPU.Message(), GPU)
+	fmt.Println(GPU.Inspect("1"))
 	fmt.Println(1)
 }

@@ -1,7 +1,8 @@
 package enum
 
 import (
-	"encoding/json"
+	"fmt"
+	"strconv"
 	"sync"
 )
 
@@ -17,54 +18,62 @@ func init() {
 }
 
 type IEnum interface {
-	//Code() int64
-	Register() interface{}
+	Inspect(value interface{}) error
+	Register() Message
 	Name() string
 	Message() string
 }
 
-type Enum int
+type Message map[IEnum]string
 
-type CodeDoc struct {
-	Code int64  `json:"code"`
-	Doc  string `json:"doc"`
+func (this Message) Len() int {
+	return len(this)
 }
 
-func Inspect(e IEnum) {
-
-}
-
-//func New(e IEnum) *CodeDoc {
-//	code, err := strconv.ParseInt(fmt.Sprintf("%d", e), 10, 64)
-//	if err != nil {
-//		panic(err)
-//	}
-//	if container.exist(code) {
-//		return container.get(code)
-//	}
-//	cd := &CodeDoc{Code: code, Doc: fmt.Sprintf("%s", e.Message())}
-//	container.put(*cd)
-//	return cd
-//}
-
-func (this *CodeDoc) String() string {
-	js, err := json.Marshal(this)
-	if err == nil {
-		panic(err)
+func (this Message) Put(key IEnum, value string) Message {
+	if _, ok := this[key]; ok {
+		panic(key.Name() + " Value Duplicate Definition")
 	}
-	return string(js)
+	this[key] = value
+	return this
+}
+
+func (this Message) Get(key IEnum) string {
+	return this[key]
+}
+
+func (this Message) Exist(key interface{}) bool {
+	for k, _ := range this {
+		if i, ok := key.(int); ok {
+			d, err := strconv.Atoi(fmt.Sprintf("%d", k))
+			if nil != err {
+				panic(err)
+			}
+			if d == i {
+				return true
+			}
+		} else if i64, ok := key.(int64); ok {
+			d64, err := strconv.ParseInt(fmt.Sprintf("%d", k), 10, 64)
+			if nil != err {
+				panic(err)
+			}
+			if d64 == i64 {
+				return true
+			}
+		} else if s, ok := key.(string); ok {
+			if fmt.Sprintf("%s", k) == s {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 type Container map[string]interface{}
 
-func (this Container) exist(key string) bool {
-	_, ok := this[key]
-	return ok
-}
-
-func (this Container) get(key string) interface{} {
-	c, _ := this[key]
-	return c
+func (this Container) get(key string) (interface{}, bool) {
+	c, ok := this[key]
+	return c, ok
 }
 
 func (this Container) Get() Container {
@@ -75,11 +84,27 @@ func (this Container) Put(key string, value interface{}) {
 	this[key] = value
 }
 
-func Get(e IEnum) interface{} {
-	if !container.exist(e.Name()) {
-		container.Put(e.Name(), e.Register())
+func Get(e IEnum) Message {
+	c, ok := container.get(e.Name())
+	if !ok {
+		c := e.Register()
+		container.Put(e.Name(), c)
+		return c
 	}
-	return container.get(e.Name())
+	return c.(Message)
+}
+
+func Inspect(e IEnum, value interface{}) error {
+	if c, ok := container.get(e.Name()); ok {
+		if m, ok := c.(Message); ok {
+			if m.Exist(value) {
+				return nil
+			}
+			return fmt.Errorf("%s not in enum value", value)
+		}
+		return fmt.Errorf("%sEnum Message Type Error", "")
+	}
+	return fmt.Errorf("%sUndefined Enum", "")
 }
 
 func Enums() Container {
