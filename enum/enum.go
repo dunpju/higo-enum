@@ -21,8 +21,9 @@ func init() {
 type IEnum interface {
 	Code() int64
 	Message() string
-	String() string
 }
+
+type Enum int
 
 type CodeDoc struct {
 	Code int64  `json:"code"`
@@ -37,7 +38,7 @@ func New(e IEnum) *CodeDoc {
 	if container.exist(code) {
 		return container.get(code)
 	}
-	cd := &CodeDoc{Code: code, Doc: e.String()}
+	cd := &CodeDoc{Code: code, Doc: fmt.Sprintf("%s", e.Message())}
 	container.put(*cd)
 	return cd
 }
