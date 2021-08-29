@@ -105,6 +105,10 @@ func Get(e IEnum) Message {
 	return c.(Message)
 }
 
+func String(e IEnum) string {
+	return Get(e).Get(e)
+}
+
 func Inspect(e IEnum, value interface{}) error {
 	if c, ok := container.get(e.Name()); ok {
 		if m, ok := c.(Message); ok {

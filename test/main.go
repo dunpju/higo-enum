@@ -16,7 +16,7 @@ func (this TestEnum) Inspect(value interface{}) error {
 }
 
 func (this TestEnum) Message() string {
-	return enum.Get(this).Get(this)
+	return enum.String(this)
 }
 
 const (
