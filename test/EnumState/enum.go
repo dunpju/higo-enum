@@ -1,46 +1,63 @@
 package EnumState
 
-import "fmt"
-
-const (
-	Del  tenum = 1
-	Undo tenum = 2
+import (
+	"fmt"
 )
 
-func (this tenum) register() *enum {
-	switch (this) {
-	case Del:
-		return newEnum(int(Del), "已删除", "#f24b4b", "已删除")
-	case Undo:
-		return newEnum(int(Undo), "未处理", "#f47f28", "去处理")
-	default:
-		panic(fmt.Errorf("enum type undefined"))
+var (
+	enums map[state]*impl
+)
+
+const (
+	Del  state = 1
+	Undo state = 2
+)
+
+func init() {
+	enums = make(map[state]*impl)
+	enums[Del] = newEnum(int(Del), "已删除", "#f24b4b", "已删除")
+	enums[Undo] = newEnum(int(Undo), "未处理", "#f47f28", "去处理")
+}
+
+func Enums() map[state]*impl {
+	return enums
+}
+
+func Inspect(value int) {
+	state(value).enum()
+}
+
+type state int
+
+func (this state) enum() *impl {
+	if e, ok := enums[this]; ok {
+		return e
+	} else {
+		panic(fmt.Errorf("%d enum undefined", this))
 	}
 }
 
-type tenum int
-
-func (this tenum) Code() int {
-	return this.register().code
+func (this state) Code() int {
+	return this.enum().code
 }
 
-func (this tenum) Message() string {
-	return this.register().message
+func (this state) Message() string {
+	return this.enum().message
 }
 
-func (this tenum) Color() string {
-	return this.register().color
+func (this state) Color() string {
+	return this.enum().color
 }
 
-func (this tenum) Button() string {
-	return this.register().button
+func (this state) Button() string {
+	return this.enum().button
 }
 
-type enum struct {
+type impl struct {
 	code                   int
 	message, color, button string
 }
 
-func newEnum(code int, message string, color string, button string) *enum {
-	return &enum{code: code, message: message, color: color, button: button}
+func newEnum(code int, message string, color string, button string) *impl {
+	return &impl{code: code, message: message, color: color, button: button}
 }

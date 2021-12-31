@@ -41,6 +41,8 @@ func main() {
 	fmt.Println(1)
 	fmt.Println(EnumState.Del.Message())
 	fmt.Println(EnumState.Del.Code())
+	fmt.Println(EnumState.Enums())
+	EnumState.Inspect(2)
 	fmt.Println(EnumState.Undo.Message())
 	fmt.Println(EnumState.Undo.Code())
 	fmt.Println(EnumState.Undo.Color())

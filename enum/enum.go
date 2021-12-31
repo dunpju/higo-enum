@@ -3,18 +3,14 @@ package enum
 import (
 	"fmt"
 	"strconv"
-	"sync"
 )
 
 var (
 	container Container
-	onceCode  sync.Once
 )
 
 func init() {
-	onceCode.Do(func() {
-		container = make(Container, 0)
-	})
+	container = make(Container, 0)
 }
 
 type IEnum interface {
