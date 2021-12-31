@@ -17,11 +17,7 @@ func (this TestEnum) Inspect(value interface{}) error {
 }
 
 func (this TestEnum) Message() string {
-	container := enum.Get(this)
-	if e, ok := container[this]; ok {
-		return e
-	}
-	return "Undefined"
+	return enum.String(this)
 }
 
 const (

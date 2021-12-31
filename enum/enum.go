@@ -39,7 +39,10 @@ func (this Message) Put(key IEnum, value string) Message {
 }
 
 func (this Message) Get(key IEnum) string {
-	return this[key]
+	if s, ok := this[key]; ok {
+		return s
+	}
+	return "Undefined"
 }
 
 func (this Message) Exist(key interface{}) bool {
@@ -58,6 +61,14 @@ func (this Message) Exist(key interface{}) bool {
 				panic(err)
 			}
 			if d64 == i64 {
+				return true
+			}
+		} else if f, ok := key.(float64); ok {
+			f64, err := strconv.ParseFloat(fmt.Sprintf("%f", k), 32)
+			if nil != err {
+				panic(err)
+			}
+			if f64 == f {
 				return true
 			}
 		} else if s, ok := key.(string); ok {
@@ -92,6 +103,10 @@ func Get(e IEnum) Message {
 		return c
 	}
 	return c.(Message)
+}
+
+func String(e IEnum) string {
+	return Get(e).Get(e)
 }
 
 func Inspect(e IEnum, value interface{}) error {
