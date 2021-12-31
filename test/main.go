@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/dengpju/higo-enum/enum"
+	"github.com/dengpju/higo-enum/test/EnumState"
 )
 
 type TestEnum int
@@ -42,4 +43,10 @@ func main() {
 	fmt.Println(GPU.Message(), GPU)
 	fmt.Println(GPU.Inspect("1"))
 	fmt.Println(1)
+	fmt.Println(EnumState.Del.Message())
+	fmt.Println(EnumState.Del.Code())
+	fmt.Println(EnumState.Undo.Message())
+	fmt.Println(EnumState.Undo.Code())
+	fmt.Println(EnumState.Undo.Color())
+	fmt.Println(EnumState.Undo.Button())
 }
