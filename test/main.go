@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/dengpju/higo-enum/enum"
-	"github.com/dengpju/higo-enum/gen"
-	"github.com/dengpju/higo-enum/test/EnumState"
-	"github.com/dengpju/higo-enum/test/app/enums/EnumCategory"
+	"github.com/dunpju/higo-enum/enum"
+	"github.com/dunpju/higo-enum/gen"
+	"github.com/dunpju/higo-enum/test/EnumState"
+	"github.com/dunpju/higo-enum/test/app/enums/EnumCategory"
 )
 
 type TestEnum int

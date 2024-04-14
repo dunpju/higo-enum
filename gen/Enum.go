@@ -2,7 +2,7 @@ package gen
 
 import (
 	"fmt"
-	"github.com/dengpju/higo-enum/gen/stubs"
+	"github.com/dunpju/higo-enum/gen/stubs"
 	"github.com/dunpju/higo-utils/utils/dirutil"
 	"github.com/dunpju/higo-utils/utils/fileutil"
 	"github.com/dunpju/higo-utils/utils/stringutil"
