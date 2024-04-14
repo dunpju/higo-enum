@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"github.com/dengpju/higo-enum/enum"
+	"github.com/dengpju/higo-enum/gen"
 	"github.com/dengpju/higo-enum/test/EnumState"
+	"github.com/dengpju/higo-enum/test/app/enums/EnumCategory"
 )
 
 type TestEnum int
@@ -42,9 +44,18 @@ func main() {
 	fmt.Println(EnumState.Del.Message())
 	fmt.Println(EnumState.Del.Code())
 	fmt.Println(EnumState.Enums())
-	EnumState.Inspect(2)
+	err := EnumState.Inspect(3)
+	if err != nil {
+		fmt.Println(err)
+	}
 	fmt.Println(EnumState.Undo.Message())
 	fmt.Println(EnumState.Undo.Code())
 	fmt.Println(EnumState.Undo.Color())
 	fmt.Println(EnumState.Undo.Button())
+
+	gen.Execute()
+
+	fmt.Println(EnumCategory.Team)
+	fmt.Println(EnumCategory.Team.Code())
+	fmt.Println(EnumCategory.Team.Message())
 }

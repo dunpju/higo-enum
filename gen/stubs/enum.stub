@@ -1,0 +1,69 @@
+package {{.Package}}
+
+import (
+	"fmt"
+)
+
+var (
+	enums map[{{.Name}}]*enum
+)
+
+const (
+	{{- range $i,$v := .EnumMap}}
+	{{$v.Key}} {{$.Name}} = {{$v.Value}} //{{$v.Doc}}
+    {{- end}}
+)
+
+func init() {
+	enums = make(map[{{.Name}}]*enum)
+    {{- range $i,$v := .EnumMap}}
+	enums[{{$v.Key}}] = newEnum({{$.EnumType}}({{$v.Key}}), "{{$v.Doc}}")
+	{{- end}}
+}
+
+type enum struct {
+	code    int
+	message string
+}
+
+func newEnum(code int, message string) *enum {
+	return &enum{code: code, message: message}
+}
+
+func Enums() map[{{.Name}}]*enum {
+	return enums
+}
+
+func Inspect(value {{.EnumType}}) error {
+	_, err := {{.Name}}(value).inspect()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// {{.Name}} {{.Doc}}
+type {{.Name}} {{.EnumType}}
+
+func (this {{.Name}}) inspect() (*enum, error) {
+	if e, ok := enums[this]; ok {
+		return e, nil
+	}
+	return nil, fmt.Errorf("%d enum undefined", this)
+}
+
+func (this {{.Name}}) get() *enum {
+	e, err := this.inspect()
+	if err != nil {
+		panic(err)
+	}
+	return e
+}
+
+func (this {{.Name}}) Code() int {
+	return this.get().code
+}
+
+func (this {{.Name}}) Message() string {
+	return this.get().message
+}

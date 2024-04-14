@@ -23,34 +23,45 @@ func Enums() map[state]*impl {
 	return enums
 }
 
-func Inspect(value int) {
-	state(value).enum()
+func Inspect(value int) error {
+	_, err := state(value).inspect()
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 type state int
 
-func (this state) enum() *impl {
+func (this state) inspect() (*impl, error) {
 	if e, ok := enums[this]; ok {
-		return e
-	} else {
-		panic(fmt.Errorf("%d enum undefined", this))
+		return e, nil
 	}
+	return nil, fmt.Errorf("%d enum undefined", this)
+}
+
+func (this state) get() *impl {
+	e, err := this.inspect()
+	if err != nil {
+		panic(err)
+	}
+	return e
 }
 
 func (this state) Code() int {
-	return this.enum().code
+	return this.get().code
 }
 
 func (this state) Message() string {
-	return this.enum().message
+	return this.get().message
 }
 
 func (this state) Color() string {
-	return this.enum().color
+	return this.get().color
 }
 
 func (this state) Button() string {
-	return this.enum().button
+	return this.get().button
 }
 
 type impl struct {
