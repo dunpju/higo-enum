@@ -1,4 +1,4 @@
-module github.com/dengpju/higo-enum
+module github.com/dunpju/higo-enum
 
 go 1.16
 
