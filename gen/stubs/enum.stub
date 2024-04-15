@@ -5,7 +5,7 @@ import (
 )
 
 var (
-	enums map[{{.Name}}]*enum
+	enums m
 )
 
 const (
@@ -15,10 +15,14 @@ const (
 )
 
 func init() {
-	enums = make(map[{{.Name}}]*enum)
-    {{- range $i,$v := .EnumMap}}
-	enums[{{$v.Key}}] = newEnum({{$.EnumType}}({{$v.Key}}), "{{$v.Doc}}")
-	{{- end}}
+	enums = e().
+        {{- range $i,$v := .EnumMap}}
+        {{- if eq $i $.LenMap}}
+        append({{$v.Key}}, newEnum(int({{$v.Key}}), "{{$v.Doc}}"))
+        {{- else}}
+        append({{$v.Key}}, newEnum(int({{$v.Key}}), "{{$v.Doc}}")).
+        {{- end}}
+	    {{- end}}
 }
 
 type enum struct {
@@ -30,8 +34,15 @@ func newEnum(code int, message string) *enum {
 	return &enum{code: code, message: message}
 }
 
-func Enums() map[{{.Name}}]*enum {
-	return enums
+type m map[{{.Name}}]*enum
+
+func e() m {
+	return make(map[{{.Name}}]*enum)
+}
+
+func (this m) append(key {{.Name}}, value *enum) m {
+	this[key] = value
+	return this
 }
 
 func Inspect(value {{.EnumType}}) error {

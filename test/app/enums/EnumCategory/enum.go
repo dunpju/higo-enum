@@ -5,22 +5,22 @@ import (
 )
 
 var (
-	enums map[Category]*enum
+	enums m
 )
 
 const (
-	Dept Category = 1 //部门
+	Dept    Category = 1 //部门
 	Company Category = 2 //公司
-	Team Category = 3 //团队
-	Group Category = 4 //组
+	Team    Category = 3 //团队
+	Group   Category = 4 //组
 )
 
 func init() {
-	enums = make(map[Category]*enum)
-	enums[Dept] = newEnum(int(Dept), "部门")
-	enums[Company] = newEnum(int(Company), "公司")
-	enums[Team] = newEnum(int(Team), "团队")
-	enums[Group] = newEnum(int(Group), "组")
+	enums = e().
+		append(Dept, newEnum(int(Dept), "部门")).
+		append(Company, newEnum(int(Company), "公司")).
+		append(Team, newEnum(int(Team), "团队")).
+		append(Group, newEnum(int(Group), "组"))
 }
 
 type enum struct {
@@ -32,8 +32,15 @@ func newEnum(code int, message string) *enum {
 	return &enum{code: code, message: message}
 }
 
-func Enums() map[Category]*enum {
-	return enums
+type m map[Category]*enum
+
+func e() m {
+	return make(map[Category]*enum)
+}
+
+func (this m) append(key Category, value *enum) m {
+	this[key] = value
+	return this
 }
 
 func Inspect(value int) error {
