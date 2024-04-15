@@ -44,6 +44,11 @@ func Inspect(value int) error {
 	return nil
 }
 
+func Get(code int) Category {
+	_ = Category(code).get()
+	return Category(code)
+}
+
 // Category 种类
 type Category int
 

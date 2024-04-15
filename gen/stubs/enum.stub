@@ -42,6 +42,11 @@ func Inspect(value {{.EnumType}}) error {
 	return nil
 }
 
+func Get(code {{.EnumType}}) {{.Name}} {
+	_ = {{.Name}}(code).get()
+	return {{.Name}}(code)
+}
+
 // {{.Name}} {{.Doc}}
 type {{.Name}} {{.EnumType}}
 

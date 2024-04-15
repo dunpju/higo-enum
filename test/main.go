@@ -58,4 +58,8 @@ func main() {
 	fmt.Println(EnumCategory.Team)
 	fmt.Println(EnumCategory.Team.Code())
 	fmt.Println(EnumCategory.Team.Message())
+	e := EnumCategory.Get(1)
+	fmt.Println(e)
+	fmt.Println(e.Code())
+	fmt.Println(e.Message())
 }
