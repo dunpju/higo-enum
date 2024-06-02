@@ -76,6 +76,10 @@ func (this {{.Name}}) get() *enum {
 	return e
 }
 
+func (this {{.Name}}) Equals(code int) bool {
+	return this.get().code == code
+}
+
 func (this {{.Name}}) Code() int {
 	return this.get().code
 }
